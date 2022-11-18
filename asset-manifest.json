@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/multishop-seller/static/css/main.ac27297f.css",
-    "main.js": "/multishop-seller/static/js/main.79291bb5.js",
-    "static/js/787.6b202e8b.chunk.js": "/multishop-seller/static/js/787.6b202e8b.chunk.js",
-    "static/media/logo.svg": "/multishop-seller/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
-    "index.html": "/multishop-seller/index.html",
-    "main.ac27297f.css.map": "/multishop-seller/static/css/main.ac27297f.css.map",
-    "main.79291bb5.js.map": "/multishop-seller/static/js/main.79291bb5.js.map",
-    "787.6b202e8b.chunk.js.map": "/multishop-seller/static/js/787.6b202e8b.chunk.js.map"
+    "main.css": "./static/css/main.ac27297f.css",
+    "main.js": "./static/js/main.046e3743.js",
+    "static/js/787.6b202e8b.chunk.js": "./static/js/787.6b202e8b.chunk.js",
+    "static/media/logo.svg": "./static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "./index.html",
+    "main.ac27297f.css.map": "./static/css/main.ac27297f.css.map",
+    "main.046e3743.js.map": "./static/js/main.046e3743.js.map",
+    "787.6b202e8b.chunk.js.map": "./static/js/787.6b202e8b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ac27297f.css",
-    "static/js/main.79291bb5.js"
+    "static/js/main.046e3743.js"
   ]
 }
