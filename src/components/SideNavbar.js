@@ -13,16 +13,22 @@ const SideNavbar=()=>{
             <Navbar dark>
                 <Nav navbar>
                 <NavItem className="sidebarItem">
-                <NavLink tag={ReactLink} to="/allorders"><i class="fas fa-shopping-cart"></i> All Orders</NavLink>
+                <NavLink tag={ReactLink} to="/allorders"><i class="fas fa-shopping-cart"></i> Orders</NavLink>
                 </NavItem>
                 <NavItem>
               <NavLink tag={ReactLink} to="/newProduct" ><i class="fas fa-plus-square"></i> Add Product</NavLink>
             </NavItem>
                 <NavItem>
-              <NavLink tag={ReactLink} to="/products" ><i class="fas fa-gift"></i> All Products</NavLink>
+              <NavLink tag={ReactLink} to="/products" ><i class="fas fa-gift"></i> Products</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink tag={ReactLink} to="/categories" >All Categories</NavLink>
+              <NavLink tag={ReactLink} to="/categories" ><i class="fas fa-layer-group"></i> Categories</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/users" ><i class="fas fa-users"></i> Users</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/customers" ><i class="fas fa-user-tag"></i> Customers</NavLink>
             </NavItem>
                 </Nav>
                 

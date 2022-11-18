@@ -63,12 +63,12 @@ const TopNavbar=(args)=>{
 
           </Nav>
          {isLogedIn()&&(
-                       <UncontrolledDropdown nav inNavbar className='mr-5'>
-                       <DropdownToggle nav caret className='text-white'>
-                         {getCurrentUserDetail().name}
+                       <UncontrolledDropdown nav inNavbar>
+                       <DropdownToggle nav caret className='text-white' style={{marginRight:"90px"}}>
+                       <i class="far fa-user"></i> {getCurrentUserDetail().name}
                        </DropdownToggle>
-                       <DropdownMenu >
-                         <DropdownItem onClick={()=>userLogout()}>Logout</DropdownItem>
+                       <DropdownMenu  >
+                         <DropdownItem onClick={()=>userLogout()}>Logout <i class="fas fa-sign-out-alt"></i></DropdownItem>
                        </DropdownMenu>
                      </UncontrolledDropdown>
 
@@ -77,7 +77,7 @@ const TopNavbar=(args)=>{
 
         {!isLogedIn()&&(
                        <UncontrolledDropdown nav inNavbar className='mr-5'>
-                       <DropdownToggle nav caret className='text-white'>Login Signup</DropdownToggle>
+                       <DropdownToggle nav caret className='text-white mr-5'><i class="far fa-user"></i> Login Signup</DropdownToggle>
                        <DropdownMenu >
                          <DropdownItem  onClick={()=>navigate("/login")}>Login</DropdownItem>
                          <DropdownItem onClick={()=>navigate("/signup")}>Signup</DropdownItem>

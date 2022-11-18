@@ -2,16 +2,16 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Button, Card, CardBody, CardHeader, Container, NavItem, Table } from "reactstrap"
 import Base from "../components/Base"
+import { toast } from "react-toastify";
 import { DRIVE_IMAGE_URL } from "../services/helper"
-import { GetOrderById } from "../services/order-service"
+import { GetOrderById, SendCancelOrderStatus, SendDeliveredOrderStatus, SendOutForDeliveryOrderStatus, SendPickupRequest } from "../services/order-service"
 
 const Order=()=>{
     const {orderId}=useParams()
     const [order,setOrder]=useState({
         "status":[]
     });
-
-    useEffect(()=>{
+    const loadOrder=()=>{
         GetOrderById(Number(orderId)).then((data)=>{
             setOrder(data)
             console.log(data)
@@ -19,7 +19,52 @@ const Order=()=>{
             console.log(error)
         })
         console.log(order)
+    }
+
+    useEffect(()=>{
+        loadOrder()
     },[])
+
+    const requestPickup=()=>{
+        SendPickupRequest(orderId).then(data=>{
+            toast.success("Order Pickup Requested Successfully !!!")
+            console.log(data)
+            loadOrder()
+        }).catch(error=>{
+            toast.error("Sorry something went wrong !!!")
+            console.log(error)
+        })
+    }
+    //cancel order status only
+    const cancelOrder=()=>{
+        SendCancelOrderStatus(orderId).then(data=>{
+            toast.success("Order Cancelled Successfully")
+            loadOrder()
+        }).catch(error=>{
+            toast.error("Sorry Something went wrong")
+            console.log(error)
+        })
+    }
+    const outForDelivery=()=>{
+        SendOutForDeliveryOrderStatus(orderId).then(data=>{
+            toast.success("OUT FOR DELIVERY status changed successfully")
+            loadOrder()
+        }).catch(error=>{
+            console.log(error)
+            toast.error("Sorry Something Went Wrong")
+        })
+
+
+    }
+    const deliveredOrderStatus=()=>{
+        SendDeliveredOrderStatus(orderId).then(data=>{
+            toast.success("DELIVERED status changed successfully")
+            loadOrder()
+        }).catch(error=>{
+            console.log(error)
+            toast.error("Sorry Something Went Wrong")
+        })
+    }
 
     return(
         <Base>
@@ -52,11 +97,47 @@ const Order=()=>{
                             ))
                             }
                             <tr>
+                                <td></td>
+                                <td>Delivery Charge</td>
+                                <td></td>
+                                <td> {order.deliverycharge}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
                                 <td><b>Total price</b></td>
                                 <td></td>
                                 <td><b> {order.amount}</b></td>
                             </tr>
+                            <tr>
+                                <td>Order Type</td>
+                                <td>{order.ordertype}</td>
+                            </tr>
+                            {
+                                (order.trackingId !=null) && (
+                                    <tr>
+                                <td>Tracking Id</td>
+                                <td>{order.trackingId}</td>
+                                <td><a className="btn-success" target="_blank" href={`https://pickrr.com/track/&{order.trackingId}`}>Track</a></td>
+                            </tr>
+                                )
+                            }
                         </tbody>
+                        </Table>
+                        <Table className="table-borderless">
+                            <tbody>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Date-Time</th>
+                                </tr>
+                                {
+                                    order.status?.map((st,i)=>(
+                                        <tr>
+                                        <td>{st.status}</td>
+                                        <td>{st.date}</td>
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
                         </Table>
                         <p className="text-center"><b><u>Address Details </u></b></p>
                         <Table>
@@ -81,11 +162,18 @@ const Order=()=>{
                                     <th>PIN Code :</th>
                                     <td>{order?.address?.pincode}</td>
                                 </tr>
+                                <tr>
+                                    <th>Mobile No :</th>
+                                    <td>{order?.address?.mobile}</td>
+                                </tr>
                             </tbody>
                         </Table>
 
                         <Container className="text-center">
-                        <Button >Place Order</Button>
+                        <Button onClick={()=>requestPickup()} className="btn-success" style={{marginRight:"10px"}}>Pickup Request</Button>
+                        <Button onClick={()=>outForDelivery()} className="btn-warning" style={{marginRight:"10px"}}>OUT For Deliver</Button>
+                        <Button onClick={()=>deliveredOrderStatus()} className="btn-dark" style={{marginRight:"10px"}}>Delivered</Button>
+                        <Button onClick={()=>cancelOrder()} className="btn-danger" >Cancel Order</Button>
                         </Container>
                     </CardBody>
                 </Card>

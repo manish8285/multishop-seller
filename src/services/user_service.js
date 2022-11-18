@@ -14,3 +14,15 @@ export const getCutomer=()=>{
   const url = `customer/${userId}`
   return privateAxios.get(url).then((response)=>response.data);
 }
+
+//customer admin user
+export const getAllUsers=(pageNumber=0,pageSize=5)=>{
+  const url = `users/?pageNumber=${pageNumber}&pageSize=${pageSize}`
+  return privateAxios.get(url).then((response)=>response.data);
+}
+
+export const deleteUser=(userId)=>{
+  const url = `users/${userId}`
+  return privateAxios.delete(url).then((response)=>response.data);
+}
+

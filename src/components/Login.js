@@ -32,10 +32,23 @@ const Login=()=>{
             "password":logindata.password
         }
         login(authRequest).then((data)=>{
-            doLogin(data,()=>{
-                toast.success("You have logged in successfully !!!")
-                navigate("/allorders")
-            })
+            data?.user?.roles?.forEach(role => {
+                
+                if(role.id==101){
+                    doLogin(data,()=>{
+                        toast.success("You have logged in successfully !!!")
+                        navigate("/allorders")
+                        
+                        
+                    })
+                    
+                }
+            });
+            toast.error("Invalid user name and password")
+            setlogindata({
+                "email":"",
+                "password":""
+            }) 
             
            console.log(data)
         }).catch((error)=>{
@@ -56,6 +69,7 @@ const Login=()=>{
 
                     <div className="card mt-2">
                         <div className="card-body">
+                            <h4>MULTISHOP | LOGIN</h4>
                         <Form className="">
                         <FormFeedback invalid>
                                 {JSON.stringify(logindata.error)}

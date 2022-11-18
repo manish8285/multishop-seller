@@ -13,6 +13,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Categories from './pages/Categories';
 import NewProduct from './pages/NewProduct';
+import Users from './pages/Users';
+import Customers from './pages/Customers';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
       <Route path='/product-edit/:productId' element={<ProductUpdate />} />
       <Route path='/login' element={< LoginSignup />} />
       <Route path='/categories' element={< Categories />} />
+      <Route path='/users' element={< Users />} />
+      <Route path='/customers' element={< Customers />} />
       <Route path='/newProduct' element={< NewProduct />} />
       </Routes>
     </HashRouter>

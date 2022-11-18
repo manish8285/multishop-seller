@@ -1,7 +1,10 @@
 import axios from "axios";
 import {getToken} from "../auth/index.js"
 
-export const BASE_URL='http://localhost:8080/api/v1/';
+//export const BASE_URL='http://localhost:8080/api/v1/';
+export const BASE_URL='http://34.131.250.126:8080/api/v1/';
+//export const BASE_URL='https://multimshop.herokuapp.com/api/v1/';
+export const PRODUCT_URL='https://manish8285.github.io/multishop/#/product/';
 export const DRIVE_IMAGE_URL = "https://drive.google.com/uc?export=view&id="
 
 export const myAxios = axios.create({

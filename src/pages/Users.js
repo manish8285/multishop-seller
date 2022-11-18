@@ -2,18 +2,19 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Card, Table } from "reactstrap";
-import { DRIVE_IMAGE_URL, PRODUCT_URL } from "../services/helper";
+import { DRIVE_IMAGE_URL} from "../services/helper";
 import { decreaseProductQuantity, deleteProduct, GetAllProducts, increaseProductQuantity, searchProduct } from "../services/product-service";
-import Product from "./Product";
 import InfiniteScroll from 'react-infinite-scroll-component';
-const AllProducts=()=>{
+import { deleteUser, getAllUsers } from "../services/user_service";
+import Base from "../components/Base";
+const Users=()=>{
     const [page,setPage] = useState({
         "totalPages":'',
         "pageSize":'',
         "pageNumber":'',
         "totalElements":'',
         "lastPage":false,
-        "products":[]
+        "users":[]
 
     })
 
@@ -26,45 +27,36 @@ const AllProducts=()=>{
     },[currentPage])
 
     const searchForProduct=(key)=>{
-        searchProduct(key).then(response=>{
-            //console.log(response)
-            setPage(response)
+        toast.info("function not working")
+        // searchProduct(key).then(response=>{
+        //     //console.log(response)
+        //     setPage(response)
 
+        // }).catch(error=>{
+        //     console.log(error)
+        // })
+    }
+
+
+
+    const deleteThisUser=(userId)=>{
+        deleteUser(userId).then(data=>{
+            toast.success("User Deleted Successfully !!!")
+            changePage()
         }).catch(error=>{
-            console.log(error)
-        })
-    }
-
-    const decreaseProduct=(productId)=>{
-        decreaseProductQuantity(productId).then(data=>{
-            changePage(currentPage,10)
-        })
-    }
-    const increaseProduct=(productId)=>{
-        increaseProductQuantity(productId).then(data=>{
-            changePage(currentPage,10)
-        })
-    }
-
-    const deleteThisProduct=(productId)=>{
-        deleteProduct(productId).then(data=>{
-            changePage(currentPage,10)
-            toast.success(data)
-        }).catch(error=>{
-            toast.error("You can not delete this product")
             console.log(error)
         })
     }
 
 
     const changePage=(pageSize=10)=>{
-        GetAllProducts(currentPage,pageSize).then(response=>{
-            console.log("fetching products...")
+        getAllUsers(currentPage,pageSize).then(response=>{
+            console.log("fetching users...")
             console.log(response)
             setPage({...page,
                 "pageNumber":response.pageNumber,
                 "lastPage":response.lastPage,
-                "products":[...response.products]
+                "users":[...response.users]
             })
         }).catch(error=>{
             console.log(error)
@@ -75,7 +67,8 @@ const AllProducts=()=>{
 
     return(
       
-        <div>
+        <Base>
+            <div>
             <div class="container-fluid bg-dark mb-30 py-2">
                 <div class="row px-xl-5 mx-1">
                         <div class="input-group">
@@ -106,19 +99,12 @@ const AllProducts=()=>{
                 <th>
                 #Id
                 </th>
-                <th></th>
                 <th>
                     Name
                 </th>
-                <th>SKU</th>
+                <th>Role</th>
                 <th>
-                    Price
-                </th>
-                <th>
-                    MRP
-                </th>
-                <th>
-                    Quantity
+                    Email
                 </th>
                 <th>
                     Actions
@@ -128,32 +114,16 @@ const AllProducts=()=>{
             <tbody>
             
                 
-                    {page.products.map(product=>(
+                    {page.users.map(user=>(
                         <tr>
-                            <td>{product.id}</td>
-                            <td><img class="img-fluid" width={"60px"} src={DRIVE_IMAGE_URL+product?.images[0]?.name} alt="product image" /></td>
-                            <td ><a style={{textDecoration:"none"}} href={PRODUCT_URL+product.id}>{product.name}</a></td>
-                            <td>{product.rack}</td>
-                            <td>{product.price}</td>
-                            <td>{product.mrp}</td>
-                            <td className="align-middle">
-                                <div className="input-group quantity mx-auto" style={{width: "100px"}}>
-                                    <div className="input-group-btn">
-                                        <button onClick={()=>decreaseProduct(product.id)} className="btn btn-sm btn-warning btn-minus" >
-                                        <i className="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" className="form-control form-control-sm bg-light border-0 text-center" value={product.quantity} />
-                                    <div className="input-group-btn">
-                                        <button onClick={()=>increaseProduct(product.id)} className="btn btn-sm btn-warning btn-plus">
-                                            <i className="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
+                            <td>{user.id}</td>
+                            <td>{user.name}</td>
+                            <td>{user?.roles[0]?.name}</td>
+                            <td>{user.email}</td>
+                            
                             <td>
-                            <a className="text-danger" onClick={()=>deleteThisProduct(product.id)} style={{marginRight:"10px"}} ><i class="fas fa-trash-alt"></i></a>
-                            <a onClick={()=>navigate(`/product-edit/${product.id}`)} className="btn-primary"><i class="fas fa-edit"></i></a>
+                            <a className="text-danger" onClick={()=>deleteThisUser(user.id)} style={{marginRight:"10px"}} ><i class="fas fa-trash-alt"></i></a>
+                            <a onClick={()=>navigate(`/product-edit/${user.id}`)} className="btn-primary"><i class="fas fa-edit"></i></a>
                             </td>
                         </tr>
 
@@ -198,7 +168,8 @@ const AllProducts=()=>{
 
 
     </div>
+        </Base>
     )
 }
 
-export default AllProducts
+export default Users

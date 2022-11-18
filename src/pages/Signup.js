@@ -47,11 +47,12 @@ const Signup=()=>{
     return (
 
             <Container className="mt-2">
+            
             <div className="row offset-md-2">
                 <div className="col-md-8">
+                <h1 className="text-center text-warning">MULTISHOP | SIGNUP</h1>
                 <div className="card">
             <div className="card-body">
-                <h1>Signup to Continue</h1>
                 <Form>
   
                 <FormGroup>
