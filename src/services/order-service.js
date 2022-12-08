@@ -5,6 +5,11 @@ export const GetAllorders=()=>{
     return privateAxios.get(url).then(response=>response.data)
 }
 
+export const GetAllProductorders=(pageNumber,pageSize)=>{
+    let url = `admin/all_orders?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    return privateAxios.get(url).then(response=>response.data)
+}
+
 export const GetOrderById=(orderId)=>{
     let url = `admin/orders/order/${orderId}`
     return privateAxios.get(url).then(response=>response.data)
@@ -12,6 +17,10 @@ export const GetOrderById=(orderId)=>{
 
 export const SendPickupRequest=(orderId)=>{
     let url = `admin/orders/pickup/order/${orderId}`
+    return privateAxios.post(url).then(response=>response.data)
+}
+export const SendCancelPickupRequest=(orderId)=>{
+    let url = `admin/orders/cancel_pickup/order/${orderId}`
     return privateAxios.post(url).then(response=>response.data)
 }
 export const SendCancelOrderStatus=(orderId)=>{

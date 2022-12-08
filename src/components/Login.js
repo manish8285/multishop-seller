@@ -69,7 +69,7 @@ const Login=()=>{
 
                     <div className="card mt-2">
                         <div className="card-body">
-                            <h4>MULTISHOP | LOGIN</h4>
+                            <h4>HomeoRx | LOGIN</h4>
                         <Form className="">
                         <FormFeedback invalid>
                                 {JSON.stringify(logindata.error)}
@@ -89,7 +89,7 @@ const Login=()=>{
                             <Container className="text-center">
                             <Button onClick={()=>attemptLogin()} >Login</Button>
                             </Container>
-                            <a className="text-dark" onClick={()=>{navigate("/signup")}} >New member? Signup</a>
+                            {/* <a className="text-dark" onClick={()=>{navigate("/signup")}} >New member? Signup</a> */}
                             </Form>
 
                         </div>

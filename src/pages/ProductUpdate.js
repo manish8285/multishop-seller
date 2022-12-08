@@ -3,17 +3,41 @@ import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
 import { Button, Card, CardBody, CardHeader, Col, Container, Form, FormGroup, Input, Label, Row, Table } from "reactstrap"
+import { getCurrentSellerDetails, isSeller } from "../auth"
 import Base from "../components/Base"
+import { getAllCategories } from "../services/category-service"
 import { DRIVE_IMAGE_URL } from "../services/helper"
 import { DeleteProductImage, GetProductById, updateSavedProduct, SaveProductImage } from "../services/product-service"
+import { getAllSellers } from "../services/seller-service"
 
 const ProductUpdate=()=>{
     const {productId}=useParams()
-
+    const [sellers,setSellers]=useState([])
     // console.log(productId)
-     const [product,setProduct]=useState({"images":[]})
+    const [product,setProduct]=useState({
+        name:"",
+        price:"",
+        quantity:"",
+        mrp:"",
+        rack:"",
+        brand:"",
+        origin:"",
+        pathy:"",
+        expiry:"",
+        size:"",
+        category:{
+            id:''
+        },
+        seller:{
+            id:''
+        },
+        "images":[]
+
+
+    })
      const [newImage,setNewImage] = useState({"name":""})
      const [imgName,setImgName] = useState("")
+     const [categories,setCategories]=useState([])
      let navigate = useNavigate()
 
  
@@ -26,9 +50,38 @@ const ProductUpdate=()=>{
          })
      }
 
+     const loadSellers=()=>{
+        if(isSeller()){
+            const iseller=getCurrentSellerDetails()
+            setSellers(isSeller)
+            setProduct({
+                ...product,
+                seller:isSeller
+            })
+        }else{
+            getAllSellers().then(data=>{
+                setSellers(data)
+            }).catch(error=>console.log(error))
+        }
+    }
+
+
+     const updateCategory=(event)=>{
+        setProduct({...product,"categoryId":event.target.value})
+        
+     }
+
      const updateProduct=(event)=>{
         setProduct({...product,[event.target.id]: event.target.value})
      }
+     useEffect(()=>{
+        getAllCategories().then(data=>{
+            //console.log(data)
+            setCategories(data)
+        })
+
+        loadSellers()
+    },[])
 
      const updateThisProduct=()=>{
          updateSavedProduct(product).then(data=>{
@@ -42,7 +95,6 @@ const ProductUpdate=()=>{
 
      useEffect(()=>{
          fetchProduct(productId)
-         //console.log(product)
      },[])
 
 
@@ -68,7 +120,7 @@ const ProductUpdate=()=>{
     useEffect(()=>{
             let lastIndex = newImage.name.indexOf("/view?usp=sharing")
             var name = newImage.name.substring(32,lastIndex)
-            //console.log(name)
+            console.log(name)
             setImgName(name)
             
         
@@ -113,6 +165,32 @@ const ProductUpdate=()=>{
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
+                                <Label md={2} for="category">Category</Label>
+                                <Col md={10}>
+                                    <Input onChange={(event)=>setProduct({...product,category:{id:event.target.value}})} type="select" id="categoryId" >
+                                        {
+                                            categories.map((category,index)=>(
+                                                <option selected={(category.id==product.category.id)?true:false} key={index} value={category.id} >{category.name}</option>
+                                            ))
+                                        }
+                                    </Input>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label for="seller" typeof="text" md={2}>Seller</Label>
+                                <Col md={10}>
+                                    <Input id="seller" onChange={(event)=>setProduct({...product,seller:{id:event.target.value}})} type="select" >
+                                        <option selected disabled> ---Select Seller--- </option>
+                                        {
+                                            sellers.map((s,index)=>(
+                                                <option selected={(s.id==product.seller.id)?true:false} key={index} value={s.id}  >{s.storeName}</option>
+                                            ))
+                                        }
+                                        
+                                    </Input>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
                                 <Label for="origin" onChange={(event)=>{updateProduct(event)}} typeof="text" md={2}>Origin</Label>
                                 <Col md={10}>
                                     <Input id="origin" onChange={(event)=>{updateProduct(event)}} type="text" value={product.origin} />
@@ -134,6 +212,24 @@ const ProductUpdate=()=>{
                                 <Label for="rack" typeof="text" md={2}>SKU</Label>
                                 <Col md={10}>
                                     <Input id="rack" onChange={(event)=>{updateProduct(event)}} type="text" value={product.rack} />
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label for="expiry" typeof="text" md={2}>Expiry</Label>
+                                <Col md={10}>
+                                    <Input id="expiry" onChange={(event)=>{updateProduct(event)}} type="text" value={product.expiry} />
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label for="pathy" typeof="text" md={2}>Pathy</Label>
+                                <Col md={10}>
+                                    <Input id="pathy" onChange={(event)=>{updateProduct(event)}} type="text" value={product.pathy} />
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label for="size" typeof="text" md={2}>Size</Label>
+                                <Col md={10}>
+                                    <Input id="size" onChange={(event)=>{updateProduct(event)}} type="text" value={product.size} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>

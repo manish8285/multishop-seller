@@ -15,6 +15,11 @@ import Categories from './pages/Categories';
 import NewProduct from './pages/NewProduct';
 import Users from './pages/Users';
 import Customers from './pages/Customers';
+import Specialization from './pages/Specialization';
+import AllAppointments from './pages/AllAppointments';
+import Sellers from './pages/Sellers';
+import Appointment from './pages/Appointment';
+import PaymentVerification from './pages/PaymentVerification';
 
 function App() {
   return (
@@ -30,8 +35,13 @@ function App() {
       <Route path='/login' element={< LoginSignup />} />
       <Route path='/categories' element={< Categories />} />
       <Route path='/users' element={< Users />} />
+      <Route path='/sellers' element={< Sellers />} />
       <Route path='/customers' element={< Customers />} />
       <Route path='/newProduct' element={< NewProduct />} />
+      <Route path='/specialization' element={< Specialization />} />
+      <Route path='/appointments' element={< AllAppointments />} />
+      <Route path='/appointment/:appId' element={< Appointment />} />
+      <Route path='/verify_payment/:payId' element={< PaymentVerification />} />
       </Routes>
     </HashRouter>
   );

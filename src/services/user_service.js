@@ -26,3 +26,10 @@ export const deleteUser=(userId)=>{
   return privateAxios.delete(url).then((response)=>response.data);
 }
 
+//get user by email id auth admin
+export const getUserByEmail=(email)=>{
+  const url = `users/email/${email}`
+  return privateAxios.get(url).then((response)=>response.data);
+}
+
+

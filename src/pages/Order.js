@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { Button, Card, CardBody, CardHeader, Container, NavItem, Table } from "reactstrap"
+import { useNavigate, useParams } from "react-router-dom"
+import { Button, Card, CardBody, CardHeader, Col, Container, NavItem, Row, Table } from "reactstrap"
 import Base from "../components/Base"
 import { toast } from "react-toastify";
-import { DRIVE_IMAGE_URL } from "../services/helper"
-import { GetOrderById, SendCancelOrderStatus, SendDeliveredOrderStatus, SendOutForDeliveryOrderStatus, SendPickupRequest } from "../services/order-service"
+import { BASE_URL, DRIVE_IMAGE_URL } from "../services/helper"
+import { GetOrderById, SendCancelOrderStatus, SendCancelPickupRequest, SendDeliveredOrderStatus, SendOutForDeliveryOrderStatus, SendPickupRequest } from "../services/order-service"
 
 const Order=()=>{
+    let navigate=useNavigate()
     const {orderId}=useParams()
     const [order,setOrder]=useState({
         "status":[]
@@ -28,6 +29,16 @@ const Order=()=>{
     const requestPickup=()=>{
         SendPickupRequest(orderId).then(data=>{
             toast.success("Order Pickup Requested Successfully !!!")
+            console.log(data)
+            loadOrder()
+        }).catch(error=>{
+            toast.error("Sorry something went wrong !!!")
+            console.log(error)
+        })
+    }
+    const cancelPickupRequest=()=>{
+        SendCancelPickupRequest(orderId).then(data=>{
+            toast.success("Pickup Request Cancelled Successfully !!!")
             console.log(data)
             loadOrder()
         }).catch(error=>{
@@ -77,6 +88,28 @@ const Order=()=>{
                     
                     </CardHeader>
                     <CardBody>
+                    {(order.selfPayment) && (
+                        <Row>
+                            <Col md="4">
+                                <p className="m-0 text-success"><i class="fas fa-globe-asia"></i> <b> Online Payment ₹{order.selfPayment.amount}</b></p>
+                                {
+                                    !(order.selfPayment.verified) &&(<i class="fas fa-info-circle text-warning"> Payment Not Verification</i>)
+                                }
+                                <p></p>
+                            </Col>
+                            <Col md="4">
+                                <a href={BASE_URL+"images/recipts/"+order.selfPayment.recipt}>
+                                <img  src={BASE_URL+"images/recipts/"+order.selfPayment.recipt} width={210} alt="" />
+                                </a>
+                                
+                            </Col>
+                            <Col md="4">
+                            <Button onClick={()=>navigate("/verify_payment/"+order.selfPayment.id)}  className="btn-success rounded-0" style={{marginRight:"10px",width:"100%"}}>Verify Payment</Button>
+                            <br  />
+                            </Col>
+
+                        </Row>
+                    )}    
                     <p className="text-center cursor"><b><u>Item details</u></b></p>
                         <Table responsive>
                         <tbody>
@@ -90,9 +123,9 @@ const Order=()=>{
                             order?.items?.map((item,i)=>(
                                 <tr key={i}>
                                 <td>{item.id}</td>
-                                <td> <img width="60px" src={DRIVE_IMAGE_URL+item.product?.images[0]?.name} alt="" /> {item.product?.name}</td>
+                                <td style={{whiteSpace:"nowrap"}} > <img width="60px" src={DRIVE_IMAGE_URL+item.product?.images[0]?.name} alt="" />{item.product?.name} </td>
                                 <td>X {item.quantity}</td>
-                                <td>Rs {item.price}</td>
+                                <td style={{whiteSpace:"nowrap"}} >₹ {item.price}</td>
                             </tr>
                             ))
                             }
@@ -100,13 +133,13 @@ const Order=()=>{
                                 <td></td>
                                 <td>Delivery Charge</td>
                                 <td></td>
-                                <td> {order.deliverycharge}</td>
+                                <td style={{whiteSpace:"nowrap"}} >₹ {order.deliverycharge}</td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td><b>Total price</b></td>
                                 <td></td>
-                                <td><b> {order.amount}</b></td>
+                                <td style={{whiteSpace:"nowrap"}}><b>₹ {order.amount}</b></td>
                             </tr>
                             <tr>
                                 <td>Order Type</td>
@@ -117,13 +150,15 @@ const Order=()=>{
                                     <tr>
                                 <td>Tracking Id</td>
                                 <td>{order.trackingId}</td>
-                                <td><a className="btn-success" target="_blank" href={`https://pickrr.com/track/&{order.trackingId}`}>Track</a></td>
+                                <td><a className="btn-success" target="_blank" href={`https://pickrr.com/track/${order.trackingId}`}>Track</a></td>
                             </tr>
                                 )
                             }
                         </tbody>
                         </Table>
-                        <Table className="table-borderless">
+                        <Row>
+                            <Col md="8">
+                            <Table className="table-borderless">
                             <tbody>
                                 <tr>
                                     <th>Status</th>
@@ -134,11 +169,29 @@ const Order=()=>{
                                         <tr>
                                         <td>{st.status}</td>
                                         <td>{st.date}</td>
+                                        <td>
+                                        
+                                        </td>
                                         </tr>
                                     ))
                                 }
                             </tbody>
                         </Table>
+                            </Col>
+                            <Col md="4">
+                            <Container className="">
+                        <Button onClick={()=>requestPickup()} className="btn-success rounded-0" style={{marginRight:"10px",width:"100%"}}>Pickup Request</Button>
+                        <br  />
+                        <Button onClick={()=>cancelPickupRequest()} className="btn-danger rounded-0" style={{marginRight:"10px",width:"100%"}}>Cancel Pickup Request</Button>
+                        <br  />
+                        <Button onClick={()=>outForDelivery()} className="btn-warning rounded-0 mt-3" style={{marginRight:"10px",width:"100%"}}>OUT For Delivery</Button>
+                        <br />
+                        <Button onClick={()=>deliveredOrderStatus()} className="btn-dark rounded-0" style={{marginRight:"10px",width:"100%" }}>Delivered</Button>
+                        <br />
+                        <Button onClick={()=>cancelOrder()} className="btn-danger rounded-0" style={{width:"100%"}} >Cancel Order</Button>
+                        </Container>
+                            </Col>
+                        </Row>
                         <p className="text-center"><b><u>Address Details </u></b></p>
                         <Table>
                             <tbody>
@@ -169,12 +222,7 @@ const Order=()=>{
                             </tbody>
                         </Table>
 
-                        <Container className="text-center">
-                        <Button onClick={()=>requestPickup()} className="btn-success" style={{marginRight:"10px"}}>Pickup Request</Button>
-                        <Button onClick={()=>outForDelivery()} className="btn-warning" style={{marginRight:"10px"}}>OUT For Deliver</Button>
-                        <Button onClick={()=>deliveredOrderStatus()} className="btn-dark" style={{marginRight:"10px"}}>Delivered</Button>
-                        <Button onClick={()=>cancelOrder()} className="btn-danger" >Cancel Order</Button>
-                        </Container>
+                        
                     </CardBody>
                 </Card>
             </Container>

@@ -57,7 +57,7 @@ const AllProducts=()=>{
     }
 
 
-    const changePage=(pageSize=10)=>{
+    const changePage=(currentPage,pageSize=10)=>{
         GetAllProducts(currentPage,pageSize).then(response=>{
             console.log("fetching products...")
             console.log(response)
@@ -80,8 +80,8 @@ const AllProducts=()=>{
                 <div class="row px-xl-5 mx-1">
                         <div class="input-group">
                             <input type="text" onChange={(event)=>{searchForProduct(event.target.value)}} class="form-control" placeholder="Search for products" />
-                            <div class="input-group-append">
-                                <span class="input-group-text bg-transparent text-primary">
+                            <div class="input-group-append d-flex">
+                                <span class="input-group-text bg-transparent text-primary rounded-0">
                                     <i class="fa fa-search"></i>
                                 </span>
                             </div>
@@ -111,6 +111,8 @@ const AllProducts=()=>{
                     Name
                 </th>
                 <th>SKU</th>
+                <th>Seller</th>
+                <th>Category</th>
                 <th>
                     Price
                 </th>
@@ -134,6 +136,8 @@ const AllProducts=()=>{
                             <td><img class="img-fluid" width={"60px"} src={DRIVE_IMAGE_URL+product?.images[0]?.name} alt="product image" /></td>
                             <td ><a style={{textDecoration:"none"}} href={PRODUCT_URL+product.id}>{product.name}</a></td>
                             <td>{product.rack}</td>
+                            <td>{product.seller?.storeName}</td>
+                            <td>{product.category.name}</td>
                             <td>{product.price}</td>
                             <td>{product.mrp}</td>
                             <td className="align-middle">

@@ -30,6 +30,17 @@ const SideNavbar=()=>{
             <NavItem>
               <NavLink tag={ReactLink} to="/customers" ><i class="fas fa-user-tag"></i> Customers</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/sellers" ><i class="fas fa-user-tag"></i> Sellers</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/specialization" ><i class="fas fa-tags"></i> Specialization</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink tag={ReactLink} to="/appointments" ><i class="fas fa-notes-medical"></i> Appointments</NavLink>
+            </NavItem>
+
+
                 </Nav>
                 
             </Navbar>

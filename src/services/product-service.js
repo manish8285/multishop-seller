@@ -23,6 +23,10 @@ export const SaveNewProduct=(produc)=>{
     const url=`products/`
     return privateAxios.post(url,produc).then(response=>response.data)
 }
+export const SaveNewProductSeller=(produc)=>{
+    const url=`seller/product`
+    return privateAxios.post(url,produc).then(response=>response.data)
+}
 export const updateSavedProduct=(produc)=>{
     const url=`products/`
     return privateAxios.put(url,produc).then(response=>response.data)
